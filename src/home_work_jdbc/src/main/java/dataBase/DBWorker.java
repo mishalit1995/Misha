@@ -24,6 +24,7 @@ public class DBWorker {
             " (SELECT actor_id, count(film_id) amount FROM film_library.cast_team GROUP BY actor_id) af " +
             " on (a.id = af.actor_id) WHERE af.amount >= ?;";
 
+
     private static final String GET_ACTOR_DIRECTOR = "SELECT * FROM film_library.actors " +
             "INTERSECT SELECT * FROM film_library.directors;";
 
@@ -56,7 +57,7 @@ public class DBWorker {
                 films.add(new Film(resultSet.getInt("id"), resultSet.getString("title"),
                         new Director(resultSet.getInt("drector_id"), resultSet.getString("name"),
                                 resultSet.getDate("birthday")), resultSet.getString("country"),
-                                resultSet.getDate("datePremier")));
+                        resultSet.getDate("datePremier")));
             }
             return films;
         } catch (SQLException e) {
@@ -126,7 +127,7 @@ public class DBWorker {
                 films.add(new Film(resultSet.getInt("film_id"), resultSet.getString("title"),
                         new Director(resultSet.getInt("director_id"), resultSet.getString("name"),
                                 resultSet.getDate("birthday")), resultSet.getString("country"),
-                                resultSet.getDate("premier")));
+                        resultSet.getDate("premier")));
             }
             return films;
         } catch (SQLException e) {

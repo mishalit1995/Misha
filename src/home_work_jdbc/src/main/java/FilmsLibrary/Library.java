@@ -6,7 +6,9 @@ import home_work_JDBC.dataBase.DBWorker;
 import home_work_JDBC.film.Film;
 import home_work_JDBC.people.Actor;
 
+
 import java.util.List;
+
 
 public class Library {
 
@@ -21,38 +23,38 @@ public class Library {
 
     public void getNewfilm() {
         List<Film> films = dbWorker.getFilmByYear();
+        for (Film film : films) {
+            System.out.println(film.toString());
+        }
     }
 
     public void getActorByFilm(String name) {
         int id = dbWorker.getFilmId(name);
         List<Actor> actors = dbWorker.getActorByFilm(id);
+        for (Actor actor : actors) {
+            System.out.println(actor.toString());
+        }
     }
 
     public void getActorsFilmNumber(int number) {
-        List<Actor> actors = (List<Actor>) addCast(dbWorker.getActorsByFilms(number));
+        List<Actor> actors = dbWorker.getActorsByFilms(number);
+        for (Actor actor : actors) {
+            System.out.println(actor.toString());
+        }
+
     }
 
     public void getActorDirector() {
-        List<Actor> actors = (List<Actor>) addCast(dbWorker.getActorDirector());
+        List<Actor> actors = dbWorker.getActorDirector();
+        for (Actor actor : actors) {
+            System.out.println(actor.toString());
+        }
     }
 
     public void deleteOldFilms(int year) {
         dbWorker.deleteOldFilm(year);
     }
 
-    private List<?> addCast(List<?> list) {
-        for (Object o : list) {
-            if (o instanceof Film) {
-                Film film = (Film) o;
-                film.setActors(dbWorker.getActorByFilm(film.getId()));
-            }
-            if (o instanceof Actor) {
-                Actor actor = (Actor) o;
-                actor.setFilms(dbWorker.getFilmWithActor(actor.getId()));
-            }
-        }
-        return list;
-    }
 
     public void closeConnection() {
         connectionHolder.closeConnection();
