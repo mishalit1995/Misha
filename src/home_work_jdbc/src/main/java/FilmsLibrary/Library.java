@@ -6,57 +6,80 @@ import home_work_JDBC.dataBase.DBWorker;
 import home_work_JDBC.film.Film;
 import home_work_JDBC.people.Actor;
 
-
 import java.util.List;
-
 
 public class Library {
 
+    private DBWorker requests;
     private ConnectionHolder connectionHolder;
-    private DBWorker dbWorker;
 
-    public void startLibrary() {
+    public void connection() {
         connectionHolder = new ConnectionHolder();
-        connectionHolder.createConnection();
-        dbWorker = new DBWorker();
+        connectionHolder.connection();
+        requests = new DBWorker();
     }
 
-    public void getNewfilm() {
-        List<Film> films = dbWorker.getFilmByYear();
+
+    public List<Film> getNewFilms() {
+        List<Film> films = requests.getFilmsByYear();
+        if (!films.isEmpty()) {
+            films = setCast(films);
+            return films;
+        } else {
+            return null;
+        }
+    }
+
+    public List<Actor> getActorByFilmName(String name) {
+        int filmID = requests.getFilmId(name);
+        List<Actor> actors = requests.getActorsByFilm(filmID);
+        if (!actors.isEmpty()) {
+            actors = setFilms(actors);
+            return actors;
+        } else
+            return null;
+    }
+
+
+    public List<Actor> getActorByFilmNumber(int count) {
+        List<Actor> actors = requests.getActorsByNFilms(count);
+        if (!actors.isEmpty()) {
+            actors = setFilms(actors);
+            return actors;
+        } else
+            return null;
+    }
+
+    public List<Actor> getActorsDirectors() {
+        List<Actor> actors = requests.getActorsDirectors();
+        if (!actors.isEmpty()) {
+            actors = setFilms(actors);
+            return actors;
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteOldFilms(int years) {
+        requests.deleteOldFilms(years);
+    }
+
+    private List<Actor> setFilms(List<Actor> actors) {
+        for (Actor actor : actors) {
+            actor.setFilms(requests.getFilmsByActor(actor.getId()));
+        }
+        return actors;
+    }
+
+    public List<Film> setCast(List<Film> films) {
         for (Film film : films) {
-            System.out.println(film.toString());
+            film.setActors(requests.getActorsByFilm(film.getId()));
         }
+        return films;
     }
 
-    public void getActorByFilm(String name) {
-        int id = dbWorker.getFilmId(name);
-        List<Actor> actors = dbWorker.getActorByFilm(id);
-        for (Actor actor : actors) {
-            System.out.println(actor.toString());
-        }
-    }
+    public void close() {
+        connectionHolder.closeConection();
 
-    public void getActorsFilmNumber(int number) {
-        List<Actor> actors = dbWorker.getActorsByFilms(number);
-        for (Actor actor : actors) {
-            System.out.println(actor.toString());
-        }
-
-    }
-
-    public void getActorDirector() {
-        List<Actor> actors = dbWorker.getActorDirector();
-        for (Actor actor : actors) {
-            System.out.println(actor.toString());
-        }
-    }
-
-    public void deleteOldFilms(int year) {
-        dbWorker.deleteOldFilm(year);
-    }
-
-
-    public void closeConnection() {
-        connectionHolder.closeConnection();
     }
 }

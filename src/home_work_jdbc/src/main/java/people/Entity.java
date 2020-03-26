@@ -6,12 +6,12 @@ public abstract class Entity {
 
     private int id;
     private String name;
-    private Date birthday;
+    private Date birth;
 
-    public Entity(int id, String name, Date birthday) {
+    public Entity(int id, String name, Date birth) {
         this.id = id;
         this.name = name;
-        this.birthday = birthday;
+        this.birth = birth;
     }
 
     public int getId() {
@@ -30,12 +30,12 @@ public abstract class Entity {
         this.name = name;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public Date getBirth() {
+        return birth;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setBirth(Date birth) {
+        this.birth = birth;
     }
 
     @Override
@@ -43,7 +43,7 @@ public abstract class Entity {
         return "{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", birthday=" + birthday +
+                ", birthday=" + birth +
                 '}';
     }
 }

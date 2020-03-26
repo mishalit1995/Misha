@@ -7,27 +7,24 @@ public class ConnectionHolder {
 
     public static Connection connection;
     public static Statement statement;
-    public static PreparedStatement preparedStatement;
 
-    private String url = "jdbc:mysql://localhost:3306/film_library";
+    private String url = "jdbc:mysql://localhost:3306/film_library?useSSL=false";
     private String user = "root";
     private String pass = "root";
 
-    public Connection createConnection() {
-        Connection mycon = null;
+    public void connection() {
         try {
-            mycon = DriverManager.getConnection(url, user, pass);
+            connection = DriverManager.getConnection(url, user, pass);
+            statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return mycon;
     }
 
-    public void closeConnection() {
+    public void closeConection() {
         try {
             statement.close();
             connection.close();
-            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
